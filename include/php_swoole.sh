@@ -16,7 +16,7 @@ Install_PHP_Swoole()
     fi
 
     if echo "${Cur_PHP_Version}" | grep -Eqi '^8.[0-3].'; then
-        Download_Files ${Download_Mirror}/web/swoole/${PHPSwoole_Ver}.tgz ${PHPSwoole_Ver}.tgz
+        Download_Files "https://pecl.php.net/get/${PHPSwoole_Ver}.tgz" "${PHPSwoole_Ver}.tgz" || exit 1
         Tar_Cd ${PHPSwoole_Ver}.tgz ${PHPSwoole_Ver}
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl --enable-http2 --enable-swoole-json
@@ -24,7 +24,7 @@ Install_PHP_Swoole()
         cd -
         rm -rf ${PHPSwoole_Ver}
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.[2-4].'; then
-        Download_Files ${Download_Mirror}/web/swoole/swoole-4.8.13.tgz swoole-4.8.13.tgz
+        Download_Files "https://pecl.php.net/get/swoole-4.8.13.tgz" "swoole-4.8.13.tgz" || exit 1
         Tar_Cd swoole-4.8.13.tgz swoole-4.8.13
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl --enable-http2 --enable-swoole-json
@@ -32,7 +32,7 @@ Install_PHP_Swoole()
         cd -
         rm -rf swoole-4.8.13
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.1.'; then
-        Download_Files ${Download_Mirror}/web/swoole/swoole-4.5.11.tgz swoole-4.5.11.tgz
+        Download_Files "https://pecl.php.net/get/swoole-4.5.11.tgz" "swoole-4.5.11.tgz" || exit 1
         Tar_Cd swoole-4.5.11.tgz swoole-4.5.11
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl --enable-http2 --enable-swoole-json
@@ -40,7 +40,7 @@ Install_PHP_Swoole()
         cd -
         rm -rf swoole-4.5.11
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.0.'; then
-        Download_Files ${Download_Mirror}/web/swoole/swoole-4.3.6.tgz swoole-4.3.6.tgz
+        Download_Files "https://pecl.php.net/get/swoole-4.3.6.tgz" "swoole-4.3.6.tgz" || exit 1
         Tar_Cd swoole-4.3.6.tgz swoole-4.3.6
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl --enable-http2
@@ -48,7 +48,7 @@ Install_PHP_Swoole()
         cd -
         rm -rf swoole-4.3.6
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.[3-6].'; then
-        Download_Files ${Download_Mirror}/web/swoole/swoole-1.10.5.tgz swoole-1.10.5.tgz
+        Download_Files "https://pecl.php.net/get/swoole-1.10.5.tgz" "swoole-1.10.5.tgz" || exit 1
         Tar_Cd swoole-1.10.5.tgz swoole-1.10.5
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl
@@ -56,7 +56,7 @@ Install_PHP_Swoole()
         cd -
         rm -rf swoole-1.10.5
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^5.2.'; then
-        Download_Files ${Download_Mirror}/web/swoole/swoole-1.6.10.tgz swoole-1.6.10.tgz
+        Download_Files "https://pecl.php.net/get/swoole-1.6.10.tgz" "swoole-1.6.10.tgz" || exit 1
         Tar_Cd swoole-1.6.10.tgz swoole-1.6.10
         ${PHP_Path}/bin/phpize
         ./configure --with-php-config=${PHP_Path}/bin/php-config --enable-openssl

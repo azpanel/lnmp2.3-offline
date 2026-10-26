@@ -120,3 +120,22 @@ faa2fcd5168b10764d35081356511d5f84db5c526a1aa4b6add2db94b6853b2b  ngx_devel_kit-
 
 # https://github.com/aperezdc/ngx-fancyindex/releases/download/v0.5.2/ngx-fancyindex-0.5.2.tar.xz
 04c3d098ed5d8d6016d92a784c7f7692dd8cd65603a7e7d59dd3d4bbdc374656  ngx-fancyindex-0.5.2.tar.xz
+
+# Swoole: fixed-version official PECL release archives.
+# https://pecl.php.net/get/swoole-6.0.2.tgz
+ca9df27a4188f6670720ffaed9c4ecd6e832ea5aed55e554b63230f3147166ca  swoole-6.0.2.tgz
+
+# https://pecl.php.net/get/swoole-4.8.13.tgz
+f4b7b856c112b1058985e0b1fca320ec1211299607b363073de9a709628ad32a  swoole-4.8.13.tgz
+
+# https://pecl.php.net/get/swoole-4.5.11.tgz
+2d85752ee2b0944399c2901bb22832f196ba3f7ba4262c239d12ed494e2460dd  swoole-4.5.11.tgz
+
+# https://pecl.php.net/get/swoole-4.3.6.tgz
+9253d1cb3ae109e18473efc51d14a99067417c28f4c66b1b0a0cdae5141253f9  swoole-4.3.6.tgz
+
+# https://pecl.php.net/get/swoole-1.10.5.tgz
+5c1dc0b82772ca1c352de4ddf20deeb35f06e4c5a01beba5a446d78a1f747bd2  swoole-1.10.5.tgz
+
+# https://pecl.php.net/get/swoole-1.6.10.tgz
+addd1b478f7708e39423669a58911478fe189308a4f642fe4e67d7ddcf70295c  swoole-1.6.10.tgz

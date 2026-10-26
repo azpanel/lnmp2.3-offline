@@ -81,6 +81,24 @@ Lua 和 FancyIndex 的以下六个依赖也使用固定版本的上游 HTTPS 包
 
 旧 LNMP lrucache 归档无法通过上游 SHA256，校验失败时会删除旧缓存并终止；重新执行安装会下载上游原包。
 
+
+Swoole 的六个现有版本改用 PECL 官方 HTTPS 固定版本包，并在 src/checksums.sha256 中补齐 SHA256。2026-10-26 实际下载、对比结果如下：
+
+| 组件版本 | 可信源 | 与 soft.lnmp.com 对应包的比较 |
+| --- | --- | --- |
+| Swoole 6.0.2 | https://pecl.php.net/get/swoole-6.0.2.tgz | SHA256、路径、内容、权限和链接一致 |
+| Swoole 4.8.13 | https://pecl.php.net/get/swoole-4.8.13.tgz | 旧源返回 HTTP 404，无法进行双源比较；PECL 包的目录和 config.m4 入口符合现有流程 |
+| Swoole 4.5.11 | https://pecl.php.net/get/swoole-4.5.11.tgz | SHA256、路径、内容、权限和链接一致 |
+| Swoole 4.3.6 | https://pecl.php.net/get/swoole-4.3.6.tgz | SHA256、路径、内容、权限和链接一致 |
+| Swoole 1.10.5 | https://pecl.php.net/get/swoole-1.10.5.tgz | SHA256、路径、内容、权限和链接一致 |
+| Swoole 1.6.10 | https://pecl.php.net/get/swoole-1.6.10.tgz | SHA256、路径、内容、权限和链接一致 |
+
+六个 PECL 包均包含 swoole-<版本>/ 源码目录及顶层 package.xml，源码目录内保留 config.m4，适配现有 Tar_Cd、phpize 和 configure 流程。五个可比较的包逐字节一致，换源不会引入结构或源码差异；4.8.13 仅验证了官方包的结构，无法确认旧源是否存在补丁。六处下载均在下载或校验失败时立即终止，避免继续解压、编译。已验证 PHP 版本分支的下载地址、实际解压路径、六项 SHA256，以及错误缓存的拒绝和删除；本批未实际编译扩展或执行完整安装。原有版本选择仍有独立限制：6.0.2 的 package.xml 要求 PHP >= 8.1，而脚本仍将 PHP 8.0 指向它，且未覆盖 PHP 8.4/8.5；这些问题不是本次换源造成的。
+
+SourceGuardian 按要求保持原安装脚本和 soft.lnmp.com 下载地址，不升级，也不新增未经上游核验的 SHA256。官网 https://www.sourceguardian.com/loaders.html 当前提供 17.0.0；本次未找到现有 12.1.2、14.0.0、14.0.3 的可用官方历史下载地址，因此无法对这些旧包作同版本双源一致性判断。旧源可获取的五个包为 14.0.0 x86_64、12.1.2 i386/aarch64、14.0.3 armhf/aarch64，包内 version 均与路径一致，ixed.*.lin 均位于 ZIP 根目录，ELF 架构也与下载分支相符，可沿用 unzip -d loaders.linux-${ARCH} 后复制 Loader 的路径。SourceGuardian 是预编译 Loader，没有源码编译步骤；本次未执行 PHP 加载测试。12.1.2 armhf 的旧源地址已返回 HTTP 404，该原有下载问题仍存在。
+
+另对比了官网下载的 17.0.0 x86_64/armhf/aarch64 包：Loader 同样位于 ZIP 根目录，但与旧包同名的二进制内容均不同，新增 PHP 8.3–8.5 Loader；x86_64 包还移除了 PHP 4.3–5.2 Loader，i386 当前官网下载地址返回 HTTP 404。因此不能将官网当前包当作现有历史包的同版本替换。
+
 自定义参数
 lnmp.conf配置文件，可以修改lnmp.conf自定义下载服务器地址、网站/数据库目录及添加nginx模块和php编译参数；不论安装升级都会调用该文件里的设置(如果修改了默认的参数建议备份此文件)；
 详细参数说明可以 https://lnmp.org/faq/lnmp-software-list.html#lnmp.conf 查看；
