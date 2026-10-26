@@ -111,7 +111,7 @@ Sodium加密库扩展模块安装/卸载执行：./addons.sh {install|uninstall}
 相关图形界面
 * PHPMyAdmin：http://yourIP/phpmyadmin/
 * phpinfo：http://yourIP/phpinfo.php
-* PHP探针：http://yourIP/p.php
+* PHP测试（输出 hello world）：http://yourIP/p.php
 * Xcache管理界面：http://yourIP/xcache/
 * Zend Opcache管理界面：http://yourIP/ocp.php
 * apcu管理界面：http://yourIP/apc.php

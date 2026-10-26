@@ -1379,10 +1379,12 @@ phpinfo();
 ?>
 eof
 
-    echo "Copy PHP Prober..."
+    echo "Create PHP Test Page..."
+    cat >"${Default_Website_Dir}/p.php"<<'eof'
+<?php
+echo 'hello world';
+eof
     cd ${cur_dir}/src
-    tar zxf p.tar.gz
-    \cp p.php ${Default_Website_Dir}/p.php
 
     \cp ${cur_dir}/conf/index.html ${Default_Website_Dir}/index.html
     \cp ${cur_dir}/conf/lnmp.gif ${Default_Website_Dir}/lnmp.gif
