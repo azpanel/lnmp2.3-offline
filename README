@@ -64,6 +64,23 @@ LNMP 2.2 默认选择 MySQL 8.4 LTS 与 PHP 8.3，可选 PHP 8.4/8.5、MariaDB 1
 
 本批新增 10 条 SHA256，OpenSSL 1.0.2u 复用已存在且与上游相符的条目。已验证 13 处下载调用展开后的地址、失败中止行为、11 个发布包的 SHA256 和构建入口，以及错误缓存的拒绝与删除。归档逐字节一致，换源不会引入源码或目录结构导致的编译差异；本批未逐项重新编译这 11 个依赖，也未执行完整 LNMP 安装，原有编译器与系统依赖要求仍适用。
 
+Lua 和 FancyIndex 的以下六个依赖也使用固定版本的上游 HTTPS 包，并补齐 SHA256。2026-10-26 下载并对比 soft.lnmp.com 对应包后的结果如下：
+
+| 依赖 | 上游发布源 | 与 soft.lnmp.com 包的差异 |
+| --- | --- | --- |
+| luajit2 2.1-20230119 | [OpenResty 官方标签](https://github.com/openresty/luajit2/releases/tag/v2.1-20230119) | 压缩包逐字节一致 |
+| lua-nginx-module 0.10.26 | [OpenResty 官方标签](https://github.com/openresty/lua-nginx-module/releases/tag/v0.10.26) | 压缩包逐字节一致 |
+| ngx_devel_kit 0.3.3 | [项目官方标签](https://github.com/vision5/ngx_devel_kit/releases/tag/v0.3.3) | 压缩包逐字节一致 |
+| lua-resty-core 0.1.28 | [OpenResty 官方标签](https://github.com/openresty/lua-resty-core/releases/tag/v0.1.28) | 压缩包逐字节一致 |
+| lua-resty-lrucache 0.13 | [OpenResty 官方标签](https://github.com/openresty/lua-resty-lrucache/releases/tag/v0.13) | 仅两个 Lua 文件的 _VERSION 不同：上游为 0.13，LNMP 包为 0.11 |
+| ngx-fancyindex 0.5.2 | [项目官方发布附件](https://github.com/aperezdc/ngx-fancyindex/releases/tag/v0.5.2) | 压缩包逐字节一致 |
+
+六个上游归档的顶层目录均与现有变量相同，Makefile、Nginx 模块 config 入口、文件权限和链接保持一致。lrucache 的差异仅涉及 lib/resty/lrucache.lua、lib/resty/lrucache/pureffi.lua 的版本字符串，其余代码完全一致；使用上游的 0.13 标识，不复制 LNMP 包中的 0.11 标识。现有解压、LuaJIT 编译、Resty 库安装和 Nginx --add-module 路径均无需调整。
+
+已验证六处下载地址和失败中止行为、SHA256、错误缓存拒绝与删除，并在 x86_64、GCC 14.2 环境的临时目录中完成 LuaJIT 编译安装、两个 Resty 库的 make install，确认文件位于 PREFIX/lib/lua。使用 LuaJIT 和模拟的 ngx.now 加载 lrucache 两种实现，检查版本为 0.13，并完成 set/get/delete 操作。未执行完整 Nginx 模块编译或运行集成测试；本次变更不增加目录结构或 C 源码差异。
+
+旧 LNMP lrucache 归档无法通过上游 SHA256，校验失败时会删除旧缓存并终止；重新执行安装会下载上游原包。
+
 自定义参数
 lnmp.conf配置文件，可以修改lnmp.conf自定义下载服务器地址、网站/数据库目录及添加nginx模块和php编译参数；不论安装升级都会调用该文件里的设置(如果修改了默认的参数建议备份此文件)；
 详细参数说明可以 https://lnmp.org/faq/lnmp-software-list.html#lnmp.conf 查看；
