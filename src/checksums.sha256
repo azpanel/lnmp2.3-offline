@@ -139,3 +139,25 @@ f4b7b856c112b1058985e0b1fca320ec1211299607b363073de9a709628ad32a  swoole-4.8.13.
 
 # https://pecl.php.net/get/swoole-1.6.10.tgz
 addd1b478f7708e39423669a58911478fe189308a4f642fe4e67d7ddcf70295c  swoole-1.6.10.tgz
+
+# PHP 8 addon archives: fixed-version upstream HTTPS releases.
+# https://pecl.php.net/get/apcu-5.1.22.tgz
+010a0d8fd112e1ed7a52a356191da3696a6b76319423f7b0dfdeaeeafcb41a1e  apcu-5.1.22.tgz
+
+# https://www.memcached.org/files/memcached-1.6.39.tar.gz
+23e5507e933b15463161d4c5d3921b0c5f340b542d6edd7f6c5e17c34f11a363  memcached-1.6.39.tar.gz
+
+# https://pecl.php.net/get/memcache-8.2.tgz
+b3f0640eacdeb9046c6c86a1546d7fb8a4e9f219e5d9a36a287e59b2dd8208e5  memcache-8.2.tgz
+
+# https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz
+e22c0bb032fde08f53de9ffbc5a128233041d9f33b5de022c0978a2149885f82  libmemcached-1.0.18.tar.gz
+
+# https://pecl.php.net/get/memcached-3.2.0.tgz
+2a41143a7b29f4a962a3805b77aa207a99e4566e2d314ce98a051cd24d6e9636  memcached-3.2.0.tgz
+
+# https://download.imagemagick.org/archive/releases/ImageMagick-7.1.1-8.tar.xz
+05a24995cb4ad1c1185255fa0d65c24842a71972336cda20f9fbd330299d160a  ImageMagick-7.1.1-8.tar.xz
+
+# https://pecl.php.net/get/imagick-3.7.0.tgz
+5a364354109029d224bcbb2e82e15b248be9b641227f45e63425c06531792d3e  imagick-3.7.0.tgz

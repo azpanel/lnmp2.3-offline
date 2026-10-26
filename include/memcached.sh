@@ -5,7 +5,7 @@ Install_PHPMemcache()
     echo "Install memcache php extension..."
     cd ${cur_dir}/src
     if echo "${Cur_PHP_Version}" | grep -Eqi '^8.';then
-        Download_Files ${Download_Mirror}/web/memcache/${PHP8Memcache_Ver}.tgz ${PHP8Memcache_Ver}.tgz
+        Download_Files "https://pecl.php.net/get/${PHP8Memcache_Ver}.tgz" "${PHP8Memcache_Ver}.tgz" || exit 1
         Tar_Cd ${PHP8Memcache_Ver}.tgz ${PHP8Memcache_Ver}
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.';then
         Download_Files ${Download_Mirror}/web/memcache/${PHP7Memcache_Ver}.tgz ${PHP7Memcache_Ver}.tgz
@@ -40,7 +40,7 @@ Install_PHPMemcached()
         export DEBIAN_FRONTEND=noninteractive
         apt-get install libsasl2-2 sasl2-bin libsasl2-2 libsasl2-dev libsasl2-modules -y
     fi
-    Download_Files ${Download_Mirror}/web/libmemcached/${Libmemcached_Ver}.tar.gz
+    Download_Files "https://launchpad.net/libmemcached/1.0/${Libmemcached_Ver#libmemcached-}/+download/${Libmemcached_Ver}.tar.gz" "${Libmemcached_Ver}.tar.gz" || exit 1
     Tar_Cd ${Libmemcached_Ver}.tar.gz ${Libmemcached_Ver}
     if gcc -dumpversion|grep -Eq "^[7-9]|1[0-5]"; then
         patch -p1 < ${cur_dir}/src/patch/libmemcached-1.0.18-gcc7.patch
@@ -52,7 +52,7 @@ Install_PHPMemcached()
     cd ${cur_dir}/src
     if echo "${Cur_PHP_Version}" | grep -Eqi '^8.';then
         [[ -d "${PHP8Memcached_Ver}" ]] && rm -rf "${PHP8Memcached_Ver}"
-        Download_Files ${Download_Mirror}/web/php-memcached/${PHP8Memcached_Ver}.tgz ${PHP8Memcached_Ver}.tgz
+        Download_Files "https://pecl.php.net/get/${PHP8Memcached_Ver}.tgz" "${PHP8Memcached_Ver}.tgz" || exit 1
         Tar_Cd ${PHP8Memcached_Ver}.tgz ${PHP8Memcached_Ver}
     elif echo "${Cur_PHP_Version}" | grep -Eqi '^7.';then
         [[ -d "${PHP7Memcached_Ver}" ]] && rm -rf "${PHP7Memcached_Ver}"
@@ -108,7 +108,7 @@ EOF
     if [ -s /usr/local/memcached/bin/memcached ]; then
         echo "Memcached already exists."
     else
-        Download_Files ${Download_Mirror}/web/memcached/${Memcached_Ver}.tar.gz ${Memcached_Ver}.tar.gz
+        Download_Files "https://www.memcached.org/files/${Memcached_Ver}.tar.gz" "${Memcached_Ver}.tar.gz" || exit 1
         Tar_Cd ${Memcached_Ver}.tar.gz ${Memcached_Ver}
         ./configure --prefix=/usr/local/memcached
         make &&make install

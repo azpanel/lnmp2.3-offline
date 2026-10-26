@@ -99,6 +99,22 @@ SourceGuardian 按要求保持原安装脚本和 soft.lnmp.com 下载地址，�
 
 另对比了官网下载的 17.0.0 x86_64/armhf/aarch64 包：Loader 同样位于 ZIP 根目录，但与旧包同名的二进制内容均不同，新增 PHP 8.3–8.5 Loader；x86_64 包还移除了 PHP 4.3–5.2 Loader，i386 当前官网下载地址返回 HTTP 404。因此不能将官网当前包当作现有历史包的同版本替换。
 
+PHP 8 扩展安装涉及的以下七个归档改用上游 HTTPS 固定版本包，并在 src/checksums.sha256 中补齐 SHA256。2026-10-26 实际下载上游包与 soft.lnmp.com 对应包，七对压缩包逐字节一致；另逐项比较归档成员的路径、类型、文件内容、权限和链接，均一致。
+
+| 组件版本 | 上游发布源 | 与 soft.lnmp.com 包的差异 |
+| --- | --- | --- |
+| APCu 5.1.22 | https://pecl.php.net/get/apcu-5.1.22.tgz | 无，SHA256 一致 |
+| Memcached 服务端 1.6.39 | https://www.memcached.org/files/memcached-1.6.39.tar.gz | 无，SHA256 一致 |
+| PHP memcache 8.2 | https://pecl.php.net/get/memcache-8.2.tgz | 无，SHA256 一致 |
+| libmemcached 1.0.18 | https://launchpad.net/libmemcached/1.0/1.0.18/+download/libmemcached-1.0.18.tar.gz | 无，SHA256 一致 |
+| PHP memcached 3.2.0 | https://pecl.php.net/get/memcached-3.2.0.tgz | 无，SHA256 一致 |
+| ImageMagick 7.1.1-8 | https://download.imagemagick.org/archive/releases/ImageMagick-7.1.1-8.tar.xz | 无，SHA256 一致 |
+| Imagick 3.7.0 | https://pecl.php.net/get/imagick-3.7.0.tgz | 无，SHA256 一致 |
+
+四个 PECL 包均保留顶层 package.xml 和原有的组件名-版本源码目录，目录内包含 config.m4，适配现有 Tar_Cd、phpize 和 configure 流程；APCu 的 apc.php 也保留。三个独立组件均保留原有顶层目录、可执行的 configure 和 Makefile.in，使用正式发布归档，无需额外运行 autoreconf。libmemcached 原有 GCC 7 兼容补丁已通过 patch --dry-run 检查。七个归档本身完全相同，换源不会引入目录结构、源码、权限或链接差异导致的编译问题，无需新增源码补丁。
+
+七处下载均在下载或 SHA256 校验失败时立即终止，避免继续解压、编译。已验证 PHP 8.0/8.3/8.4/8.5 分支的七项下载地址、文件名、解压目标和失败中止行为，以及七项官方归档的 SHA256、有效缓存复用、错误缓存的拒绝和删除。本批未实际编译扩展或执行完整安装，既有 PHP 版本、编译器和系统依赖兼容限制仍适用。共享的 APCu 5.1.22、Memcached 服务端、libmemcached、ImageMagick 和 Imagick 下载分支在其他 PHP 版本下也使用相同上游源；其他旧版归档、SourceGuardian 和 IonCube 不在本次迁移范围内。
+
 自定义参数
 lnmp.conf配置文件，可以修改lnmp.conf自定义下载服务器地址、网站/数据库目录及添加nginx模块和php编译参数；不论安装升级都会调用该文件里的设置(如果修改了默认的参数建议备份此文件)；
 详细参数说明可以 https://lnmp.org/faq/lnmp-software-list.html#lnmp.conf 查看；

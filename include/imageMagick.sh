@@ -43,7 +43,7 @@ Install_ImageMagic()
             Download_Files ${Download_Mirror}/web/imagemagick/ImageMagick-6.9.9-27.tar.gz ImageMagick-6.9.9-27.tar.gz
             Tar_Cd ImageMagick-6.9.9-27.tar.gz ImageMagick-6.9.9-27
         else
-            Download_Files ${Download_Mirror}/web/imagemagick/${ImageMagick_Ver}.tar.xz ${ImageMagick_Ver}.tar.xz
+            Download_Files "https://download.imagemagick.org/archive/releases/${ImageMagick_Ver}.tar.xz" "${ImageMagick_Ver}.tar.xz" || exit 1
             Tar_Cd ${ImageMagick_Ver}.tar.xz ${ImageMagick_Ver}
         fi
 
@@ -57,7 +57,7 @@ Install_ImageMagic()
         Download_Files ${Download_Mirror}/web/imagick/imagick-3.1.2.tgz imagick-3.1.2.tgz
         Tar_Cd imagick-3.1.2.tgz imagick-3.1.2
     else
-        Download_Files ${Download_Mirror}/web/imagick/${Imagick_Ver}.tgz ${Imagick_Ver}.tgz
+        Download_Files "https://pecl.php.net/get/${Imagick_Ver}.tgz" "${Imagick_Ver}.tgz" || exit 1
         Tar_Cd ${Imagick_Ver}.tgz ${Imagick_Ver}
     fi
     ${PHP_Path}/bin/phpize
