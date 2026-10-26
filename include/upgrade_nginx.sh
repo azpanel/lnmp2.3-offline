@@ -14,7 +14,7 @@ Upgrade_Nginx()
 
     Nginx_Version=""
     echo "Current Nginx Version:${Cur_Nginx_Version}"
-    echo "You can get version number from http://nginx.org/en/download.html"
+    echo "You can get version number from https://nginx.org/en/download.html"
     read -p "Please enter nginx version you want, (example: 1.20.2): " Nginx_Version
     if [ "${Nginx_Version}" = "" ]; then
         echo "Error: You must enter a nginx version!!"
@@ -32,7 +32,7 @@ Upgrade_Nginx()
         echo "nginx-${Nginx_Version}.tar.gz [found]"
     else
         echo "Notice: nginx-${Nginx_Version}.tar.gz not found!!!download now......"
-        wget -c --progress=dot:giga http://nginx.org/download/nginx-${Nginx_Version}.tar.gz
+        wget -c --progress=dot:giga https://nginx.org/download/nginx-${Nginx_Version}.tar.gz
         if [ $? -eq 0 ]; then
             echo "Download nginx-${Nginx_Version}.tar.gz successfully!"
         else

@@ -45,7 +45,7 @@ Install_Only_Nginx()
         echo "/usr/local/lib" >> /etc/ld.so.conf
     fi
     ldconfig
-    Download_Files ${Download_Mirror}/web/nginx/${Nginx_Ver}.tar.gz ${Nginx_Ver}.tar.gz
+    Download_Files https://nginx.org/download/${Nginx_Ver}.tar.gz ${Nginx_Ver}.tar.gz
     Install_Nginx
     StartUp nginx
     rm -rf ${cur_dir}/src/${Nginx_Ver}

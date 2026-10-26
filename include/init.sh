@@ -494,7 +494,7 @@ Check_Download()
         Download_Files ${Download_Mirror}/lib/libunwind/${Libunwind_Ver}.tar.gz ${Libunwind_Ver}.tar.gz
     fi
     if [ "${Stack}" != "lamp" ]; then
-        Download_Files ${Download_Mirror}/web/nginx/${Nginx_Ver}.tar.gz ${Nginx_Ver}.tar.gz
+        Download_Files https://nginx.org/download/${Nginx_Ver}.tar.gz ${Nginx_Ver}.tar.gz
     fi
     if [[ "${DBSelect}" =~ ^(1|2|3|4|5|11)$ ]]; then
         if [[ "${Bin}" = "y" && "${DBSelect}" =~ ^[2-4]$ ]]; then
