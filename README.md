@@ -386,6 +386,8 @@ Create_Default_Certificate
 | mhash 0.9.9.9 | [项目 SourceForge](https://sourceforge.net/projects/mhash/files/mhash/0.9.9.9/) | 仅 `config.guess`、`config.sub` 内容不同，LNMP 包使用 2019 年版本 |
 | FreeType 2.13.0 | [GNU Savannah](https://download.savannah.gnu.org/releases/freetype/) | 压缩包完全一致 |
 
+FreeType 2.13.0 主源下载或校验失败时，会清理失败文件并尝试 [GNU Savannah 备用源](https://download-mirror.savannah.gnu.org/releases/freetype/freetype-2.13.0.tar.xz)，使用相同的 SHA256 校验。
+
 五个上游包的顶层目录和 configure 入口均符合现有解压与编译流程，libmcrypt 的 libltdl/configure 也保留。三个旧项目原始的 GNU 配置脚本不能自动识别 aarch64；安装时通过 `Update_GNU_Config`，从已校验的 libiconv 1.17 官方归档中取出 build-aux/config.guess、`config.sub`（分别为 2022、2021 年版本），再运行 configure，以保留架构识别兼容性。SHA256 对应未经修改的上游归档，配置脚本在解压后更新。
 
 在 x86_64、GCC 14.2 环境中，以临时目录作为安装前缀完成了五项依赖的 configure、make、make install 验证，包含 libmcrypt 的 libltdl。libiconv、mhash、FreeType 使用默认编译选项通过；libmcrypt、mcrypt 使用 `CFLAGS='-O2 -std=gnu89'` 通过。libmcrypt 默认选项下的隐式函数声明错误在 LNMP 原包中同样复现，属于原有的 GCC 14 兼容问题，本次换源没有修改编译选项。更新后的 `config.sub` 已检查 x86_64、aarch64、ARM、ppc64le、riscv64，`config.guess` 已模拟 aarch64 检查；这些检查不等同于在各架构实际编译。
