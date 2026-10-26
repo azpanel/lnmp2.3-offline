@@ -29,6 +29,7 @@ Start_Upgrade_PHP()
     cd ${cur_dir}/src
     if [ -s php-${php_version}.tar.bz2 ]; then
         echo "php-${php_version}.tar.bz2 [found]"
+        Verify_Download_File "php-${php_version}.tar.bz2" || exit 1
     else
         echo "Notice: php-$php_version.tar.bz2 not found!!!download now..."
         if Download_PHP_Source "${php_version}"; then

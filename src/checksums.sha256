@@ -1,0 +1,46 @@
+# SHA256 checksums for the configured Nginx, PHP and phpMyAdmin source archives.
+# Downloaded and verified on 2026-10-26 over official HTTPS sources.
+# PHP and phpMyAdmin hashes match upstream SHA256 metadata when available.
+# Nginx and PHP 5.2.17 hashes were computed from the official archives.
+# Format: sha256sum -c checksums.sha256
+
+# https://nginx.org/download/nginx-1.31.8.tar.gz
+0652b760b3b772d2ec17b47c2fc15d9a95e6fe35cd5b877eadc1a62d9bc75af1  nginx-1.31.8.tar.gz
+# https://museum.php.net/php5/php-5.2.17.tar.bz2
+e81beb13ec242ab700e56f366e9da52fd6cf18961d155b23304ca870e53f116c  php-5.2.17.tar.bz2
+# https://museum.php.net/php5/php-5.3.29.tar.bz2
+c4e1cf6972b2a9c7f2777a18497d83bf713cdbecabb65d3ff62ba441aebb0091  php-5.3.29.tar.bz2
+# https://museum.php.net/php5/php-5.4.45.tar.bz2
+4e0d28b1554c95cfaea6fa2b64aac85433f158ce72bb571bcd5574f98f4c6582  php-5.4.45.tar.bz2
+# https://museum.php.net/php5/php-5.5.38.tar.bz2
+473c81ebb2e48ca468caee031762266651843d7227c18a824add9b07b9393e38  php-5.5.38.tar.bz2
+# https://museum.php.net/php5/php-5.6.40.tar.bz2
+ffd025d34623553ab2f7fd8fb21d0c9e6f9fa30dc565ca03a1d7b763023fba00  php-5.6.40.tar.bz2
+# https://www.php.net/distributions/php-7.0.33.tar.bz2
+4933ea74298a1ba046b0246fe3771415c84dfb878396201b56cb5333abe86f07  php-7.0.33.tar.bz2
+# https://www.php.net/distributions/php-7.1.33.tar.bz2
+95a5e5f2e2b79b376b737a82d9682c91891e60289fa24183463a2aca158f4f4b  php-7.1.33.tar.bz2
+# https://www.php.net/distributions/php-7.2.34.tar.bz2
+0e5816d668a2bb14aca68cef8c430430bd86c3c5233f6c427d1a54aac127abcf  php-7.2.34.tar.bz2
+# https://www.php.net/distributions/php-7.3.33.tar.bz2
+f412487d7d953437e7978a0d7b6ec99bf4a85cf3378014438a8577b89535451a  php-7.3.33.tar.bz2
+# https://www.php.net/distributions/php-7.4.33.tar.bz2
+4e8117458fe5a475bf203128726b71bcbba61c42ad463dffadee5667a198a98a  php-7.4.33.tar.bz2
+# https://www.php.net/distributions/php-8.0.30.tar.bz2
+98a9cb6a0e27a6950cdf4b26dcac48f2be2d936d5224a502f066cf3d4cf19b92  php-8.0.30.tar.bz2
+# https://www.php.net/distributions/php-8.1.34.tar.bz2
+98e0a08a0fae37d08dfcca2f5ff6664863097dde4b1d360af2acc8c3542f2a0f  php-8.1.34.tar.bz2
+# https://www.php.net/distributions/php-8.2.35.tar.bz2
+0f43efd1ac24d4f90002c8d4d570bf4c4d59fa14313bf270aae8cf04d9dfdef3  php-8.2.35.tar.bz2
+# https://www.php.net/distributions/php-8.3.36.tar.bz2
+46f4b45e3688ed2b1819015a7b532c15b51cc055bdd3b13fd00ddfeebeedcd5f  php-8.3.36.tar.bz2
+# https://www.php.net/distributions/php-8.4.27.tar.bz2
+b2530a877c722f4b08c9e174a30cb08bac2b7e1903ee6e9e315f0aa9f5f82c24  php-8.4.27.tar.bz2
+# https://www.php.net/distributions/php-8.5.12.tar.bz2
+ffb60edc437ced63b5137e4984db379a8111c50049c711510d8b958277efc1a8  php-8.5.12.tar.bz2
+# https://files.phpmyadmin.net/phpMyAdmin/4.0.10.20/phpMyAdmin-4.0.10.20-all-languages.tar.xz
+16595dd62c8256caa999beb722d793674da86054e117b9968f82352d84233b24  phpMyAdmin-4.0.10.20-all-languages.tar.xz
+# https://files.phpmyadmin.net/phpMyAdmin/4.9.11/phpMyAdmin-4.9.11-all-languages.tar.xz
+2b14737a2220e5ac9d2eaf683df6b56ebaa490d038ee980367cb4db909a57923  phpMyAdmin-4.9.11-all-languages.tar.xz
+# https://files.phpmyadmin.net/phpMyAdmin/5.2.3/phpMyAdmin-5.2.3-all-languages.tar.xz
+57881348297c4412f86c410547cf76b4d8a236574dd2c6b7d6a2beebe7fc44e3  phpMyAdmin-5.2.3-all-languages.tar.xz

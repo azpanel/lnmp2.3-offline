@@ -42,6 +42,7 @@ Upgrade_Nginx()
             exit 1
         fi
     fi
+    Verify_Download_File "nginx-${Nginx_Version}.tar.gz" || exit 1
     echo "============================check files=================================="
 
     Install_Nginx_Openssl

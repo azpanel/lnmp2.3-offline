@@ -31,6 +31,7 @@ Upgrade_phpMyAdmin()
             exit 1
         fi
     fi
+    Verify_Download_File "phpMyAdmin-${phpMyAdmin_Version}-all-languages.tar.xz" || exit 1
     echo "============================check files=================================="
     echo "Backup old phpMyAdmin..."
     mv ${Default_Website_Dir}/phpmyadmin ${Default_Website_Dir}/phpmyadmin${Upgrade_Date}
