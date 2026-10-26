@@ -483,10 +483,10 @@ Check_Download()
 {
     Echo_Blue "[+] Downloading files..."
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/libiconv/${Libiconv_Ver}.tar.gz ${Libiconv_Ver}.tar.gz
-    Download_Files ${Download_Mirror}/web/libmcrypt/${LibMcrypt_Ver}.tar.gz ${LibMcrypt_Ver}.tar.gz
-    Download_Files ${Download_Mirror}/web/mcrypt/${Mcypt_Ver}.tar.gz ${Mcypt_Ver}.tar.gz
-    Download_Files ${Download_Mirror}/web/mhash/${Mhash_Ver}.tar.bz2 ${Mhash_Ver}.tar.bz2
+    Download_Files "https://ftp.gnu.org/gnu/libiconv/${Libiconv_Ver}.tar.gz" "${Libiconv_Ver}.tar.gz" || exit 1
+    Download_Files "https://downloads.sourceforge.net/project/mcrypt/Libmcrypt/${LibMcrypt_Ver#libmcrypt-}/${LibMcrypt_Ver}.tar.gz" "${LibMcrypt_Ver}.tar.gz" || exit 1
+    Download_Files "https://downloads.sourceforge.net/project/mcrypt/MCrypt/${Mcypt_Ver#mcrypt-}/${Mcypt_Ver}.tar.gz" "${Mcypt_Ver}.tar.gz" || exit 1
+    Download_Files "https://downloads.sourceforge.net/project/mhash/mhash/${Mhash_Ver#mhash-}/${Mhash_Ver}.tar.bz2" "${Mhash_Ver}.tar.bz2" || exit 1
     if [ "${SelectMalloc}" = "2" ]; then
         Download_Files ${Download_Mirror}/lib/jemalloc/${Jemalloc_Ver}.tar.bz2 ${Jemalloc_Ver}.tar.bz2
     elif [ "${SelectMalloc}" = "3" ]; then
@@ -579,10 +579,21 @@ Install_Libiconv()
     rm -rf ${cur_dir}/src/${Libiconv_Ver}
 }
 
+Update_GNU_Config()
+{
+    # Preserve modern architecture detection using GNU scripts from verified libiconv.
+    local GNU_Config_File
+    for GNU_Config_File in config.guess config.sub; do
+        tar zxOf "${cur_dir}/src/${Libiconv_Ver}.tar.gz" "${Libiconv_Ver}/build-aux/${GNU_Config_File}" > "${GNU_Config_File}" || exit 1
+    done
+    chmod +x config.guess config.sub || exit 1
+}
+
 Install_Libmcrypt()
 {
     Echo_Blue "[+] Installing ${LibMcrypt_Ver}"
     Tar_Cd ${LibMcrypt_Ver}.tar.gz ${LibMcrypt_Ver}
+    Update_GNU_Config
     ./configure
     Make_Install
     /sbin/ldconfig
@@ -602,6 +613,7 @@ Install_Mcrypt()
 {
     Echo_Blue "[+] Installing ${Mcypt_Ver}"
     Tar_Cd ${Mcypt_Ver}.tar.gz ${Mcypt_Ver}
+    Update_GNU_Config
     ./configure
     Make_Install
     cd ${cur_dir}/src/
@@ -612,6 +624,7 @@ Install_Mhash()
 {
     Echo_Blue "[+] Installing ${Mhash_Ver}"
     Tar_Cd ${Mhash_Ver}.tar.bz2 ${Mhash_Ver}
+    Update_GNU_Config
     ./configure
     Make_Install
     ln -sf /usr/local/lib/libmhash.a /usr/lib/libmhash.a
@@ -627,7 +640,7 @@ Install_Mhash()
 Install_Freetype()
 {
     if echo "${Ubuntu_Version}" | grep -Eqi "^1[89]\.|2[0-9]\." || echo "${Mint_Version}" | grep -Eqi "^19|2[0-9]" || echo "${Deepin_Version}" | grep -Eqi "^15\.[7-9]|15.1[0-9]|1[6-9]|2[0-9]" || echo "${Debian_Version}" | grep -Eqi "^9|1[0-9]" || echo "${Raspbian_Version}" | grep -Eqi "^9|1[0-9]" || echo "${Kali_Version}" | grep -Eqi "^202[0-9]" || echo "${UOS_Version}" | grep -Eqi "^2[0-9]" || echo "${CentOS_Version}" | grep -Eqi "^(8|9|10)" || echo "${RHEL_Version}" | grep -Eqi "^(8|9|10)" || echo "${Oracle_Version}" | grep -Eqi "^(8|9|10)" || echo "${Fedora_Version}" | grep -Eqi "^3[0-9]|29" || echo "${Rocky_Version}" | grep -Eqi "^(8|9|10)" || echo "${Alma_Version}" | grep -Eqi "^(8|9|10)" || echo "${openEuler_Version}" | grep -Eqi "^2[0-9]" || echo "${Anolis_Version}" | grep -Eqi "^(8|9|10)" || echo "${Kylin_Version}" | grep -Eqi "^V1[0-9]" || echo "${Amazon_Version}" | grep -Eqi "^202[3-9]" || echo "${OpenCloudOS_Version}" | grep -Eqi "^(8|9|10|23)" || echo "${HCE_Version}" | grep -Eqi "^2\.[0-9]"; then
-        Download_Files ${Download_Mirror}/lib/freetype/${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}.tar.xz
+        Download_Files "https://download.savannah.gnu.org/releases/freetype/${Freetype_New_Ver}.tar.xz" "${Freetype_New_Ver}.tar.xz" || exit 1
         Echo_Blue "[+] Installing ${Freetype_New_Ver}"
         Tar_Cd ${Freetype_New_Ver}.tar.xz ${Freetype_New_Ver}
         ./configure --prefix=/usr/local/freetype --enable-freetype-config

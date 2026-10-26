@@ -2,6 +2,7 @@
 # Downloaded and verified on 2026-10-26 over official HTTPS sources.
 # PHP, phpMyAdmin, OpenSSL and Composer hashes match upstream SHA256 metadata when available.
 # Nginx and PHP 5.2.17 hashes were computed from the official archives.
+# Additional dependency hashes below were computed from their upstream release archives.
 # Format: sha256sum -c checksums.sha256
 
 # https://nginx.org/download/nginx-1.31.8.tar.gz
@@ -56,3 +57,18 @@ b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89  openssl-3.5.5.
 
 # https://getcomposer.org/download/2.10.3/composer.phar
 7a2d379d5b8ffdaa028580ef26494c36d2feef4b178d3dd1473a4dbc5e17c8d6  composer-2.10.3.phar
+
+# https://ftp.gnu.org/gnu/libiconv/libiconv-1.17.tar.gz
+8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313  libiconv-1.17.tar.gz
+
+# https://downloads.sourceforge.net/project/mcrypt/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.gz
+e4eb6c074bbab168ac47b947c195ff8cef9d51a211cdd18ca9c9ef34d27a373e  libmcrypt-2.5.8.tar.gz
+
+# https://downloads.sourceforge.net/project/mcrypt/MCrypt/2.6.8/mcrypt-2.6.8.tar.gz
+5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098  mcrypt-2.6.8.tar.gz
+
+# https://downloads.sourceforge.net/project/mhash/mhash/0.9.9.9/mhash-0.9.9.9.tar.bz2
+56521c52a9033779154432d0ae47ad7198914785265e1f570cee21ab248dfef0  mhash-0.9.9.9.tar.bz2
+
+# https://download.savannah.gnu.org/releases/freetype/freetype-2.13.0.tar.xz
+5ee23abd047636c24b2d43c6625dcafc66661d1aca64dec9e0d05df29592624c  freetype-2.13.0.tar.xz
