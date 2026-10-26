@@ -19,7 +19,7 @@ Start_Upgrade_PHP()
     php_version=""
     Get_PHP_Ext_Dir
     echo "Current PHP Version:${Cur_PHP_Version}"
-    echo "You can get version number from http://www.php.net/"
+    echo "You can get version number from https://www.php.net/"
     read -p "Please enter a PHP Version you want: " php_version
     if [ "${php_version}" = "" ]; then
         echo "Error: You must enter a corrent php version!!"
@@ -31,29 +31,12 @@ Start_Upgrade_PHP()
         echo "php-${php_version}.tar.bz2 [found]"
     else
         echo "Notice: php-$php_version.tar.bz2 not found!!!download now..."
-        Get_Country
-        if [ "${country}" = "CN" ]; then
-            Download_Files http://php.vpszt.com/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -ne 0 ]; then
-                Download_Files https://www.php.net/distributions/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            fi
-        else
-            Download_Files https://www.php.net/distributions/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -ne 0 ]; then
-                Download_Files http://php.vpszt.com/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            fi
-        fi
-        if [ $? -eq 0 ]; then
+        if Download_PHP_Source "${php_version}"; then
             echo "Download php-${php_version}.tar.bz2 successfully!"
         else
-            Download_Files http://museum.php.net/php5/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -eq 0 ]; then
-                echo "Download php-${php_version}.tar.bz2 successfully!"
-            else
-                echo "You enter PHP Version was:"${php_version}
-                Echo_Red "Error! You entered a wrong version number, please check!"
-                exit 1
-            fi
+            echo "You enter PHP Version was:"${php_version}
+            Echo_Red "Error! You entered a wrong version number, please check!"
+            exit 1
         fi
     fi
 

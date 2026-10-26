@@ -109,7 +109,7 @@ Upgrade_Multiplephp()
     php_version=""
     Cur_MPHP_Version=$("${Cur_MPHP_Path}/bin/php-config" --version)
     echo "Current PHP Version: ${Cur_MPHP_Version}"
-    echo "You can get version number from http://www.php.net"
+    echo "You can get version number from https://www.php.net"
     read -p "Please enter a PHP Version you want: " php_version
     if [ "${php_version}" = "" ]; then
         Echo_Red "Error: You must enter a corrent php version!!"
@@ -127,29 +127,12 @@ Upgrade_Multiplephp()
         echo "php-${php_version}.tar.bz2 [found]"
     else
         echo "Notice: php-${php_version}.tar.bz2 not found!!!download now..."
-        Get_Country
-        if [ "${country}" = "CN" ]; then
-            Download_Files http://php.vpszt.com/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -ne 0 ]; then
-                Download_Files https://www.php.net/distributions/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            fi
+        if Download_PHP_Source "${php_version}"; then
+            echo "Download php-${php_version}.tar.bz2 successfully!"
         else
-            Download_Files https://www.php.net/distributions/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -ne 0 ]; then
-                Download_Files http://php.vpszt.com/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            fi
-        fi
-        if [ $? -eq 0 ]; then
-            echo "Download php-${Php_Ver}.tar.bz2 successfully!"
-        else
-            Download_Files http://museum.php.net/php5/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
-            if [ $? -eq 0 ]; then
-                echo "Download php-${php_version}.tar.bz2 successfully!"
-            else
-                echo "You enter PHP Version was:"${php_version}
-                Echo_Red "Error! You entered a wrong version number, please check!"
-                exit 1
-            fi
+            echo "You enter PHP Version was:"${php_version}
+            Echo_Red "Error! You entered a wrong version number, please check!"
+            exit 1
         fi
     fi
 
@@ -198,7 +181,7 @@ Upgrade_Multiplephp()
 Upgrade_MPHP5.6()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
     if [ "${ARCH}" = "aarch64" ]; then
@@ -295,7 +278,7 @@ EOF
 Upgrade_MPHP7.0()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
     ./configure --prefix=${Cur_MPHP_Path} --with-config-file-path=${Cur_MPHP_Path}/etc --with-config-file-scan-dir=${Cur_MPHP_Path}/conf.d --enable-fpm --with-fpm-user=www --with-fpm-group=www --enable-mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/usr/local/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization ${with_curl} --enable-mbregex --enable-mbstring --enable-intl --enable-pcntl --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf ${with_openssl} --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext ${with_fileinfo} --enable-opcache --with-xsl ${PHP_Buildin_Option} ${PHP_Modules_Options}
@@ -374,7 +357,7 @@ EOF
 Upgrade_MPHP7.1()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
     PHP_Openssl3_Patch
@@ -454,7 +437,7 @@ EOF
 Upgrade_MPHP7.2()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
     PHP_Openssl3_Patch
@@ -534,7 +517,7 @@ EOF
 Upgrade_MPHP7.3()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
     PHP_Openssl3_Patch
@@ -614,7 +597,7 @@ EOF
 Upgrade_MPHP7.4()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
@@ -695,7 +678,7 @@ EOF
 Upgrade_MPHP8.0()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
@@ -776,7 +759,7 @@ EOF
 Upgrade_MPHP8.1()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
@@ -856,7 +839,7 @@ EOF
 Upgrade_MPHP8.2()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}
@@ -936,7 +919,7 @@ EOF
 Upgrade_MPHP8x()
 {
     cd ${cur_dir}/src
-    Download_Files ${Download_Mirror}/web/php/php-${php_version}.tar.bz2 php-${php_version}.tar.bz2
+    Download_PHP_Source "${php_version}"
     Install_Libzip
     Echo_Blue "[+] Upgrading php-${php_version}"
     Tar_Cd php-${php_version}.tar.bz2 php-${php_version}

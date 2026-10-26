@@ -525,7 +525,7 @@ Check_Download()
             Download_Files https://downloads.mariadb.org/rest-api/mariadb/${Mariadb_Version}/${Mariadb_Ver}.tar.gz ${Mariadb_Ver}.tar.gz
         fi
     fi
-    Download_Files ${Download_Mirror}/web/php/${Php_Ver}.tar.bz2 ${Php_Ver}.tar.bz2
+    Download_PHP_Source "${Php_Ver#php-}"
     if [ ${PHPSelect} = "1" ]; then
         Download_Files ${Download_Mirror}/web/phpfpm/${Php_Ver}-fpm-0.5.14.diff.gz ${Php_Ver}-fpm-0.5.14.diff.gz
     fi
