@@ -224,6 +224,29 @@ include enable-php8.4.conf;
 | PureFTPd | `lnmp pureftpd <操作>` 或 `/etc/init.d/pure-ftpd <操作>` | `start`、`stop`、`restart`、`kill`、`status` |
 | Apache | `lnmp httpd <操作>` 或 `/etc/init.d/httpd <操作>` | `start`、`stop`、`restart`、`graceful`、`graceful-stop`、`configtest`、`status` |
 
+### 启用被禁用的函数
+
+以 root 身份执行以下命令，从默认 PHP 配置的 `disable_functions` 中移除 `system`、`proc_open` 和 `proc_get_status`：
+
+```bash
+sed -i 's/,system//g' /usr/local/php/etc/php.ini
+sed -i 's/,proc_open//g' /usr/local/php/etc/php.ini
+sed -i 's/,proc_get_status//g' /usr/local/php/etc/php.ini
+```
+
+修改后，LNMP 模式执行 `lnmp php-fpm restart`；LNMPA、LAMP 模式执行 `lnmp httpd restart`。
+
+### 关闭防跨站
+
+LNMP 模式下，以 root 身份执行以下命令，注释 Nginx FastCGI 配置中的 `PHP_ADMIN_VALUE`：
+
+```bash
+sed -i 's/^fastcgi_param PHP_ADMIN_VALUE/#fastcgi_param PHP_ADMIN_VALUE/g' /usr/local/nginx/conf/fastcgi.conf
+/usr/local/nginx/sbin/nginx -t && lnmp nginx reload
+```
+
+该命令关闭 FastCGI 层设置的 `open_basedir`。如果站点目录中的 `.user.ini` 仍设置了 `open_basedir`，还需移除对应限制；可使用 [tools/remove_open_basedir_restriction.sh](tools/remove_open_basedir_restriction.sh)，按提示输入站点根目录，由脚本处理 `.user.ini`、FastCGI 配置及服务重启。
+
 ### 虚拟主机、数据库与 SSL
 
 | 用途 | 命令格式 |
