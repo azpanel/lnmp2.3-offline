@@ -378,6 +378,7 @@ else
         Upgrade_Dependent
         echo "Copy lnmp manager..."
         sleep 1
+        Install_VHost_SSL_Helper || exit 1
         \cp ${cur_dir}/conf/lnmp /bin/lnmp
         chmod +x /bin/lnmp
         echo "Copy configure files..."
@@ -401,6 +402,7 @@ else
         Upgrade_Dependent
         echo "Copy lnmp manager..."
         sleep 1
+        Install_VHost_SSL_Helper || exit 1
         \cp ${cur_dir}/conf/lnmpa /bin/lnmp
         chmod +x /bin/lnmp
         echo "Copy configure files..."
@@ -423,6 +425,7 @@ else
         Upgrade_Dependent
         echo "Copy configure files..."
         sleep 1
+        Install_VHost_SSL_Helper || exit 1
         \cp ${cur_dir}/conf/lamp /bin/lnmp
         chmod +x /bin/lnmp
         echo "Copy configure files..."

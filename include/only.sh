@@ -55,6 +55,7 @@ Install_Only_Nginx()
     StartOrStop start nginx
     Add_Iptables_Rules
     \cp ${cur_dir}/conf/index.html ${Default_Website_Dir}/index.html
+    Install_VHost_SSL_Helper || exit 1
     \cp ${cur_dir}/conf/lnmp /bin/lnmp
     Check_Nginx_Files
 }

@@ -1014,6 +1014,13 @@ Check_LNMPConf()
     fi
 }
 
+Install_VHost_SSL_Helper()
+{
+    local destination=${1:-/usr/local/lib/lnmp}
+    mkdir -p "${destination}" &&
+        install -m 644 "${cur_dir}/include/vhost-ssl.sh" "${destination}/vhost-ssl.sh"
+}
+
 Print_APP_Ver()
 {
     echo "You will install ${Stack} stack."

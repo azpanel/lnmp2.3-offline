@@ -319,7 +319,19 @@ Add_VHost()
 List_VHost()
 {
     echo "Apache Virtualhost list:"
-    ls /usr/local/apache/conf/vhost/ | grep ".conf$" | sed 's/.conf//g'
+    local helper=/usr/local/lib/lnmp/vhost-ssl.sh
+    [ -r "${helper}" ] || helper="$(dirname -- "${BASH_SOURCE[0]}")/../include/vhost-ssl.sh"
+    if [ -r "${helper}" ]; then
+        . "${helper}"
+        List_VHost_SSL apache /usr/local/apache/conf/vhost /usr/local/apache
+    else
+        echo "SSL report helper missing: /usr/local/lib/lnmp/vhost-ssl.sh"
+        local config
+        for config in /usr/local/apache/conf/vhost/*.conf; do
+            [ -f "${config}" ] || continue
+            config=${config##*/}; printf '%s\n' "${config%.conf}"
+        done
+    fi
 }
 
 Del_VHost()

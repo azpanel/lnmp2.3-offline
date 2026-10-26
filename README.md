@@ -269,6 +269,23 @@ sed -i 's/^fastcgi_param PHP_ADMIN_VALUE/#fastcgi_param PHP_ADMIN_VALUE/g' /usr/
 
 通配符／泛域名 SSL 需要使用对应服务商的 DNS API。
 
+`lnmp vhost list` 会在虚拟主机名后展示 SSL 签发者、生效时间、失效时间和距离到期的天数，时间统一使用 UTC。LNMP、LNMPA 读取 Nginx 配置；LAMP 读取 Apache 配置。签发者优先展示机构名和通用名称（如 `Let's Encrypt / E12`）。同一站点配置多个证书时分别列出。
+
+到期颜色参照 [ckssl.sh](https://mfss.me/ckssl.sh)：
+
+| 距离到期 | 颜色 |
+| --- | --- |
+| 至少 31 天 | 绿色 |
+| 14–30 天 | 黄色 |
+| 1–13 天 | 红色 |
+| 不足 1 天或已过期 | 白色 |
+
+天数按完整的 24 小时计算；不足一天和已过期会明确标注。未生效的证书、未配置 SSL、证书缺失或损坏等状态使用白色，不中断其他站点的展示。终端默认显示颜色；管道或重定向默认输出纯文本，可用 `FORCE_COLOR=1` 强制颜色、`NO_COLOR=1` 关闭颜色。
+
+列表只读取本地配置及其 include 文件指向的证书，不进行网络探测或重载服务；显示的是磁盘上的证书信息。常规引号路径、相对路径、include 通配符和多个证书均受支持；动态路径、缺失的 include 或循环引用会显示提示。
+
+安装和迁移安装会自动部署辅助脚本到 `/usr/local/lib/lnmp/vhost-ssl.sh`。已有安装需要同步该文件和当前架构对应的 `conf/lnmp`、`conf/lnmpa` 或 `conf/lamp` 管理脚本，并保留原管理脚本中的 MySQL/MariaDB 服务名及 PHP-FPM PID 路径定制。
+
 ### 页面入口
 
 将以下地址中的 `yourIP` 替换为服务器 IP；扩展管理页需先安装对应组件。

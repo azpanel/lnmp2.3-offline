@@ -38,6 +38,7 @@ Add_Iptables_Rules()
 Add_LNMP_Startup()
 {
     echo "Add Startup and Starting LNMP..."
+    Install_VHost_SSL_Helper || exit 1
     \cp ${cur_dir}/conf/lnmp /bin/lnmp
     chmod +x /bin/lnmp
     StartUp nginx
@@ -62,6 +63,7 @@ Add_LNMP_Startup()
 Add_LNMPA_Startup()
 {
     echo "Add Startup and Starting LNMPA..."
+    Install_VHost_SSL_Helper || exit 1
     \cp ${cur_dir}/conf/lnmpa /bin/lnmp
     chmod +x /bin/lnmp
     StartUp nginx
@@ -83,6 +85,7 @@ Add_LNMPA_Startup()
 Add_LAMP_Startup()
 {
     echo "Add Startup and Starting LAMP..."
+    Install_VHost_SSL_Helper || exit 1
     \cp ${cur_dir}/conf/lamp /bin/lnmp
     chmod +x /bin/lnmp
     StartUp httpd
