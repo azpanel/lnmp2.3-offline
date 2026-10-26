@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Resolve once while sourcing: downloads also run from src/ and standalone tools/.
+LNMP_Package_Dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
+
 DB_Info=('MySQL 5.1.73' 'MySQL 5.5.62' 'MySQL 5.6.51' 'MySQL 5.7.44' 'MySQL 8.0.46' 'MariaDB 5.5.68' 'MariaDB 10.4.33' 'MariaDB 10.5.24' 'MariaDB 10.6.25' 'MariaDB 10.11.16' 'MySQL 8.4.8 LTS' 'MariaDB 11.4.10 LTS' 'MariaDB 11.8.6 LTS')
 PHP_Info=('PHP 5.2.17' 'PHP 5.3.29' 'PHP 5.4.45' 'PHP 5.5.38' 'PHP 5.6.40' 'PHP 7.0.33' 'PHP 7.1.33' 'PHP 7.2.34' 'PHP 7.3.33' 'PHP 7.4.33' 'PHP 8.0.30' 'PHP 8.1.34' 'PHP 8.2.35' 'PHP 8.3.36' 'PHP 8.4.27' 'PHP 8.5.12')
 Apache_Info=('Apache 2.2.34' 'Apache 2.4.67')
@@ -853,24 +856,114 @@ Verify_Download_File()
     Echo_Green "${FileName} SHA256 checksum ok."
 }
 
+Is_Soft_LNMP_URL()
+(
+    shopt -s nocasematch
+    [[ "$1" =~ ^https?://soft\.lnmp\.com(:[0-9]+)?(/|\?|\#|$) ]]
+)
+
+Download_File_SHA256()
+{
+    local Digest
+    [ -f "$1" ] || return 1
+    if command -v sha256sum >/dev/null 2>&1; then
+        Digest=$(sha256sum < "$1") || return 1
+        Digest=${Digest%% *}
+    elif command -v shasum >/dev/null 2>&1; then
+        Digest=$(shasum -a 256 < "$1") || return 1
+        Digest=${Digest%% *}
+    elif command -v openssl >/dev/null 2>&1; then
+        Digest=$(openssl dgst -sha256 < "$1") || return 1
+        Digest=${Digest##* }
+    else
+        return 1
+    fi
+    [[ "${Digest}" =~ ^[a-fA-F0-9]{64}$ ]] || return 1
+    printf '%s\n' "${Digest}"
+}
+
+Log_Soft_LNMP_Download()
+{
+    # Logging is best effort and never changes output or the download's status.
+    (
+        local URL=$1 FileName=$2 Event=$3 Digest=$4 Result=$5
+        local FilePath Timestamp Log_File="${LNMP_Package_Dir}/soft-lnmp-downloads.log"
+        Is_Soft_LNMP_URL "${URL}" || exit 0
+        FilePath=$(readlink -m -- "${FileName}") || exit 0
+        Timestamp=$(date -u '+%Y-%m-%dT%H:%M:%SZ') || exit 0
+        # Keep one physical line per record, including unusual filenames/URLs.
+        FilePath=${FilePath//\\/\\\\}
+        FilePath=${FilePath//$'\t'/\\t}
+        FilePath=${FilePath//$'\n'/\\n}
+        FilePath=${FilePath//$'\r'/\\r}
+        URL=${URL//\\/\\\\}
+        URL=${URL//$'\t'/\\t}
+        URL=${URL//$'\n'/\\n}
+        URL=${URL//$'\r'/\\r}
+        umask 077
+        (
+            if command -v flock >/dev/null 2>&1; then
+                flock -x 9 || exit 0
+            fi
+            printf 'time=%s\tstatus=%s\texit_code=%s\tsha256=%s\tpath=%s\turl=%s\n' \
+                "${Timestamp}" "${Event}" "${Result}" "${Digest:--}" "${FilePath}" "${URL}" >&9
+        ) 9>> "${Log_File}"
+    ) >/dev/null 2>&1 || :
+}
+
 Download_Files()
 {
     local URL=$1
     local FileName=$2
     local Wget_TLS_Option=""
+    local Event=cached Result=0 Digest="" Record_Download=n
 
     [ "${FileName}" = "" ] && FileName="${URL##*/}"
     [ "${Download_Insecure}" = "y" ] && Wget_TLS_Option="--no-check-certificate"
+    Is_Soft_LNMP_URL "${URL}" && Record_Download=y
 
     if [ -s "${FileName}" ]; then
         echo "${FileName} [found]"
-        Verify_Download_File "${FileName}"
     else
         echo "Notice: ${FileName} not found!!!download now..."
-        wget -c --progress=dot -e dotbytes=20M --prefer-family=IPv4 ${Wget_TLS_Option} "${URL}" -O "${FileName}"
-        [ $? -ne 0 ] && return 1
-        Verify_Download_File "${FileName}"
+        if wget -c --progress=dot -e dotbytes=20M --prefer-family=IPv4 ${Wget_TLS_Option} "${URL}" -O "${FileName}"; then
+            Event=downloaded
+        else
+            Result=$?
+            if [ "${Record_Download}" = y ]; then
+                Digest=$(Download_File_SHA256 "${FileName}" 2>/dev/null) || Digest=""
+                Log_Soft_LNMP_Download "${URL}" "${FileName}" download_failed "${Digest}" "${Result}"
+            fi
+            return 1
+        fi
     fi
+
+    # Capture the bytes before verification can remove a mismatched archive.
+    if [ "${Record_Download}" = y ]; then
+        Digest=$(Download_File_SHA256 "${FileName}" 2>/dev/null) || Digest=""
+    fi
+    if Verify_Download_File "${FileName}"; then
+        Result=0
+    else
+        Result=$?
+        Event="${Event}_verification_failed"
+    fi
+    if [ "${Record_Download}" = y ]; then
+        Log_Soft_LNMP_Download "${URL}" "${FileName}" "${Event}" "${Digest}" "${Result}"
+    fi
+    return "${Result}"
+}
+
+Download_And_Install_RPM()
+{
+    # Keep an on-disk copy so RPM downloads receive the same audit record.
+    local URL=$1
+    local FileName=${URL##*/}
+    (
+        cd "${cur_dir}/src" || exit 1
+        Download_Files "${URL}" "${FileName}" || exit 1
+        rpm -ivh "${FileName}"
+    )
 }
 
 Download_PHP_Source()

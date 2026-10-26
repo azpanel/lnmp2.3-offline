@@ -95,6 +95,16 @@ SSL 模板默认启用 TLSv1.2/TLSv1.3；下载流程默认校验证书，并支
 
 详细参数见 [lnmp.conf 配置说明](https://lnmp.org/faq/lnmp-software-list.html#lnmp.conf)。
 
+### soft.lnmp.com 下载记录
+
+安装、升级和扩展安装时，来自 `soft.lnmp.com` 的文件会静默追加记录到安装包根目录的 `soft-lnmp-downloads.log`（例如 `lnmp2.3/soft-lnmp-downloads.log`），不随工作目录切换而改变位置。IMAP 依赖 RPM 也先下载到 `src/` 再安装，以保留文件和下载记录。
+
+每行包含 UTC 时间 `time`、结果 `status`、退出码 `exit_code`、实际文件的 `sha256`、本地绝对路径 `path` 和下载 `url`，字段用制表符分隔。路径和 URL 中的反斜杠、制表符、换行及回车分别转义为 `\\`、`\t`、`\n`、`\r`。
+
+`downloaded` 表示新下载成功，`cached` 表示复用本地文件（不证明缓存最初来自该 URL），`download_failed` 表示下载失败，`downloaded_verification_failed` / `cached_verification_failed` 表示文件校验失败。失败记录的 SHA256 对应当时的文件内容，可能是不完整文件；文件不存在或无法计算哈希时记为 `-`。即使关闭下载校验，仍会计算并记录 SHA256。
+
+记录不额外输出到终端；日志文件以 `0600` 权限创建，写入失败不改变原下载结果。其他下载源不写入此日志，运行日志文件已排除在 Git 跟踪之外。
+
 ## 升级
 
 执行以下命令，按提示选择组件：
