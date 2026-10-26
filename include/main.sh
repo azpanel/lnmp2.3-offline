@@ -569,6 +569,7 @@ Dispaly_Selection()
     Database_Selection
     PHP_Selection
     MemoryAllocator_Selection
+    Default_Security_Selection || exit 1
 }
 
 Apache_Selection()

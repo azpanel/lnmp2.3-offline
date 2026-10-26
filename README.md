@@ -242,12 +242,48 @@ include enable-php8.4.conf;
 
 | 页面 | 地址 |
 | --- | --- |
-| phpMyAdmin | `http://yourIP/phpmyadmin/` |
-| PHP 信息 | `http://yourIP/phpinfo.php` |
-| PHP 测试（输出 `hello world`） | `http://yourIP/p.php` |
-| XCache | `http://yourIP/xcache/` |
-| OPcache | `http://yourIP/ocp.php` |
-| APCu | `http://yourIP/apc.php` |
+| phpMyAdmin | 随机模式：`https://yourIP/<32位随机字符串>/`；Basic Auth 模式：`https://yourIP/phpmyadmin/` |
+| PHP 信息 | `https://yourIP/phpinfo.php` |
+| PHP 测试（输出 `hello world`） | `https://yourIP/p.php` |
+| XCache | `https://yourIP/xcache/` |
+| OPcache | `https://yourIP/ocp.php` |
+| APCu | `https://yourIP/apc.php` |
+
+### 默认站点 HTTPS 与 phpMyAdmin 保护
+
+全新安装 LNMP、LNMPA、LAMP 时，会在开始安装前询问 phpMyAdmin 的保护方式：
+
+- **随机路径（默认）**：用安全随机源生成 32 位十六进制字符串作为目录名，不添加 Basic Auth。默认首页不公开入口，安装完成时会显示实际访问地址。
+- **Basic Auth**：保留 `/phpmyadmin/`，输入独立用户名、密码并确认密码；该目录下的 PHP 页面和静态资源均受保护。
+
+两种模式都保留 phpMyAdmin 的数据库登录。升级 phpMyAdmin 会保留入口路径、数据库登录配置及 Basic Auth；升级备份保存于 `/usr/local/etc/lnmp/backups/`，不放在网站目录内。旧安装没有安全配置时仍使用 `/phpmyadmin/`。
+
+安装前会探测本机主要 IPv4，允许确认或修改。NAT 环境请填写实际访问的公网 IPv4。默认站点使用绑定该 IP 的自签证书，HTTP 自动 301 跳转至 HTTPS，保留路径和查询参数。浏览器首次访问会提示证书不受信任，需确认信任或自行替换受信任证书。新建虚拟主机继续使用原有配置流程。
+
+安全配置位于 `/usr/local/etc/lnmp/`：
+
+| 文件 | 用途 |
+| --- | --- |
+| `security.conf` | 已安装的保护模式、入口目录、网站目录和访问 IP，仅 root 可读写 |
+| `default.crt` / `default.key` | 自签证书及私钥，RSA 2048 / SHA-256，IP SAN，有效期 365 天；私钥仅 root 可读写 |
+| `phpmyadmin.htpasswd` | Basic Auth 密码哈希，root 可读写，www 组可读；不保存明文密码 |
+
+证书不自动续期。到期前可在 root 会话中手动重签，再检查配置并重载服务：
+
+```bash
+. ./include/security.sh
+. /usr/local/etc/lnmp/security.conf
+Default_Server_IP="$Installed_Server_IP"
+Create_Default_Certificate
+# LNMP / LNMPA
+/usr/local/nginx/sbin/nginx -t && /usr/local/nginx/sbin/nginx -s reload
+# LAMP 改用
+# /usr/local/apache/bin/httpd -t && /usr/local/apache/bin/apachectl graceful
+```
+
+无人值守安装可在 `lnmp.conf` 或环境变量中预置 `PhpMyAdmin_Mode=random|basic`、`Default_Server_IP`、`PhpMyAdmin_Auth_User`；Basic Auth 密码通过环境变量 `PhpMyAdmin_Auth_Password` 提供。未预置模式时默认随机路径，未预置 IP 时使用探测结果；Basic Auth 缺少有效凭据或 IP 无效时会报错退出。交互安装的密码隐藏输入，不输出明文密码。
+
+独立安装 Nginx、数据库或多 PHP 版本不应用上述完整安装设置。已有安装不会自动迁移到 HTTPS 或随机路径。
 
 ### 卸载
 
@@ -269,7 +305,7 @@ include enable-php8.4.conf;
 | PHP | `/usr/local/php/` |
 | 多 PHP 版本 | `/usr/local/php5.6/`，版本号随实际安装版本变化 |
 | PHP 扩展配置 | `/usr/local/php/conf.d/` |
-| phpMyAdmin | `/home/wwwroot/default/phpmyadmin/` |
+| phpMyAdmin | `/home/wwwroot/default/<32位随机字符串>/` 或 `/home/wwwroot/default/phpmyadmin/` |
 | 默认网站根目录 | `/home/wwwroot/default/` |
 | Nginx 日志 | `/home/wwwlogs/` |
 

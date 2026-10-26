@@ -15,6 +15,7 @@ Upgrade_Date=$(date +"%Y%m%d%H%M%S")
 . lnmp.conf
 . include/version.sh
 . include/main.sh
+. include/security.sh
 . include/init.sh
 . include/php.sh
 . include/nginx.sh

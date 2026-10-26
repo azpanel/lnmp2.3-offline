@@ -1394,13 +1394,23 @@ eof
         \cp ${cur_dir}/conf/ocp.php ${Default_Website_Dir}/ocp.php
     fi
     echo "============================Install PHPMyAdmin================================="
-    [[ -d ${Default_Website_Dir}/phpmyadmin ]] && rm -rf ${Default_Website_Dir}/phpmyadmin
-    tar Jxf ${PhpMyAdmin_Ver}.tar.xz
-    mv ${PhpMyAdmin_Ver} ${Default_Website_Dir}/phpmyadmin
-    \cp ${cur_dir}/conf/config.inc.php ${Default_Website_Dir}/phpmyadmin/config.inc.php
-    sed -i 's/LNMPORG/LNMP.org_'`date +%s%N | head -c 13`'_VPSer.net/g' ${Default_Website_Dir}/phpmyadmin/config.inc.php
-    mkdir ${Default_Website_Dir}/phpmyadmin/{upload,save}
-    chmod 755 -R ${Default_Website_Dir}/phpmyadmin/
-    chown www:www -R ${Default_Website_Dir}/phpmyadmin/
+    Prepare_Default_Security || { Security_Error "Cannot prepare phpMyAdmin protection."; exit 1; }
+    local phpmyadmin_path="${Default_Website_Dir}/${PhpMyAdmin_Dir}"
+    if [ -e "${phpmyadmin_path}" ] || { [ "${PhpMyAdmin_Mode}" = random ] && [ -e "${Default_Website_Dir}/phpmyadmin" ]; }; then
+        Security_Error "An existing phpMyAdmin directory would conflict with this installation."
+        exit 1
+    fi
+    tar Jxf "${PhpMyAdmin_Ver}.tar.xz" || exit 1
+    mv "${PhpMyAdmin_Ver}" "${phpmyadmin_path}" || exit 1
+    \cp "${cur_dir}/conf/config.inc.php" "${phpmyadmin_path}/config.inc.php" || exit 1
+    local cookie_secret
+    cookie_secret=$(openssl rand -hex 16) || exit 1
+    sed -i "s/LNMPORG/${cookie_secret}/g" "${phpmyadmin_path}/config.inc.php" || exit 1
+    mkdir -p "${phpmyadmin_path}/upload" "${phpmyadmin_path}/save" || exit 1
+    chmod 755 -R "${phpmyadmin_path}/" || exit 1
+    chown www:www -R "${phpmyadmin_path}/" || exit 1
+    if [ "${PhpMyAdmin_Mode}" = random ]; then
+        sed -i 's|&nbsp;&nbsp;<a href="/phpmyadmin/".*</p>|</p>|' "${Default_Website_Dir}/index.html" || exit 1
+    fi
     echo "============================phpMyAdmin install completed======================="
 }
