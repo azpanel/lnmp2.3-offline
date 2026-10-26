@@ -196,7 +196,7 @@ if [ "${isSSL}" == "ssl" ]; then
         else
             cd /tmp
             [[ -f latest.tar.gz ]] && rm -f latest.tar.gz
-            wget https://soft.vpser.net/lib/acme.sh/latest.tar.gz --prefer-family=IPv4
+            wget https://github.com/acmesh-official/acme.sh/archive/refs/heads/master.tar.gz --prefer-family=IPv4 -O latest.tar.gz
             tar zxf latest.tar.gz
             cd acme.sh-*
             ./acme.sh --install --log --home /usr/local/acme.sh --certhome /usr/local/nginx/conf/ssl -m ${email_address}
@@ -312,7 +312,7 @@ if [ "${isSSL}" == "ssl" ]; then
         else
             cd /tmp
             [[ -s latest.tar.gz ]] && rm -f latest.tar.gz
-            wget https://soft.vpser.net/lib/acme.sh/latest.tar.gz --prefer-family=IPv4
+            wget https://github.com/acmesh-official/acme.sh/archive/refs/heads/master.tar.gz --prefer-family=IPv4 -O latest.tar.gz
             tar zxf latest.tar.gz
             cd acme.sh-*
             ./acme.sh --install --log --home /usr/local/acme.sh --certhome /usr/local/apache/conf/ssl -m ${email_address}
