@@ -44,6 +44,26 @@ LNMP 2.2 默认选择 MySQL 8.4 LTS 与 PHP 8.3，可选 PHP 8.4/8.5、MariaDB 1
 
 迁移前缓存的三个 LNMP 重打包归档与上游 SHA256 不同，校验失败时会删除旧缓存并终止本次安装；重新执行安装会下载相应上游包。
 
+同日追加迁移以下 11 个发布包，版本及压缩格式保持不变。实际下载上游包和 soft.lnmp.com 对应包后，11 对归档的 SHA256 均完全相同；逐项检查的路径、内容、权限和链接也一致，无需新增源码补丁或架构识别处理。
+
+| 依赖 | 上游 HTTPS 发布源 |
+| --- | --- |
+| PCRE 8.45 | [项目 SourceForge](https://sourceforge.net/projects/pcre/files/pcre/8.45/) |
+| FreeType 2.7 | [GNU Savannah](https://download.savannah.gnu.org/releases/freetype/) |
+| jemalloc 5.3.0 | [官方 GitHub Release](https://github.com/jemalloc/jemalloc/releases/tag/5.3.0) |
+| gperftools 2.9.1 | [官方 GitHub Release](https://github.com/gperftools/gperftools/releases/tag/gperftools-2.9.1) |
+| libunwind 1.2.1 | [GNU Savannah](https://download.savannah.gnu.org/releases/libunwind/) |
+| OpenSSL 1.0.2u | [官方历史归档](https://www.openssl.org/source/old/1.0.2/) |
+| curl 7.62.0 | [curl 官方下载](https://curl.se/download/) |
+| Autoconf 2.13 | [GNU FTP](https://ftp.gnu.org/gnu/autoconf/) |
+| ICU4C 58.3 | [官方 GitHub Release](https://github.com/unicode-org/icu/releases/tag/release-58-3) |
+| ICU4C 60.3 | [官方 GitHub Release](https://github.com/unicode-org/icu/releases/tag/release-60-3) |
+| libzip 1.3.2 | [libzip 官方下载](https://libzip.org/download/) |
+
+除 ICU 的顶层目录为 icu、构建入口为 icu/source/configure 外，其余包均使用原有的“项目名-版本”目录；OpenSSL 使用 config，其余使用 configure。ICU、jemalloc、gperftools 选用正式发布附件，保留现有流程所需的生成文件，未使用 GitHub 自动生成的源码快照。PCRE 的完整安装、单独安装 Nginx 和 Lua 模块下载入口均已更新，其他依赖下载入口也在下载或校验失败时终止。
+
+本批新增 10 条 SHA256，OpenSSL 1.0.2u 复用已存在且与上游相符的条目。已验证 13 处下载调用展开后的地址、失败中止行为、11 个发布包的 SHA256 和构建入口，以及错误缓存的拒绝与删除。归档逐字节一致，换源不会引入源码或目录结构导致的编译差异；本批未逐项重新编译这 11 个依赖，也未执行完整 LNMP 安装，原有编译器与系统依赖要求仍适用。
+
 自定义参数
 lnmp.conf配置文件，可以修改lnmp.conf自定义下载服务器地址、网站/数据库目录及添加nginx模块和php编译参数；不论安装升级都会调用该文件里的设置(如果修改了默认的参数建议备份此文件)；
 详细参数说明可以 https://lnmp.org/faq/lnmp-software-list.html#lnmp.conf 查看；

@@ -78,7 +78,7 @@ EOF
             if [ "${Nginx_With_Pcre}" = "" ]; then
                 Nginx_Module_Lua="--with-ld-opt=-Wl,-rpath,/usr/local/luajit/lib --add-module=${cur_dir}/src/${LuaNginxModule} --add-module=${cur_dir}/src/${NgxDevelKit} --with-pcre=${cur_dir}/src/${Pcre_Ver} --with-pcre-jit"
                 cd ${cur_dir}/src
-                Download_Files ${Download_Mirror}/web/pcre/${Pcre_Ver}.tar.bz2 ${Pcre_Ver}.tar.bz2
+                Download_Files "https://downloads.sourceforge.net/project/pcre/pcre/${Pcre_Ver#pcre-}/${Pcre_Ver}.tar.bz2" "${Pcre_Ver}.tar.bz2" || exit 1
                 Tar_Cd ${Pcre_Ver}.tar.bz2
             else
                 Nginx_Module_Lua="--with-ld-opt=-Wl,-rpath,/usr/local/luajit/lib --add-module=${cur_dir}/src/${LuaNginxModule} --add-module=${cur_dir}/src/${NgxDevelKit}"
