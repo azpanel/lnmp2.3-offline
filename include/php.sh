@@ -210,36 +210,21 @@ Install_Composer()
 {
     if [ "${CheckMirror}" != "n" ]; then
         echo "Downloading Composer..."
-        local Composer_Wget_TLS_Option=""
-        [ "${Download_Insecure}" = "y" ] && Composer_Wget_TLS_Option="--no-check-certificate"
-        if echo "${PHPSelect}" | grep -Eqi '^[1-8]' || echo "${php_version}" | grep -Eqi '^5.[2-6].*|7.[0-2].*' || echo "${Php_Ver}" | grep -Eqi "php-5.[2-6].*|php-7.[0-2].*"; then
-            wget --progress=dot:giga --prefer-family=IPv4 ${Composer_Wget_TLS_Option} -T 120 -t3 ${Download_Mirror}/web/php/composer/composer-2.2.phar -O /usr/local/bin/composer
-            if [ $? -eq 0 ]; then
-                echo "Composer install successfully."
-                chmod +x /usr/local/bin/composer
-            else
-                echo "Composer install failed, try to from composer official website..."
-                curl -sS --connect-timeout 30 -m 60 https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --2.2
-                if [ $? -eq 0 ]; then
-                    echo "Composer install successfully."
-                fi
-            fi
-        else
-            wget --progress=dot:giga --prefer-family=IPv4 ${Composer_Wget_TLS_Option} -T 120 -t3 https://mirrors.aliyun.com/composer/composer.phar -O /usr/local/bin/composer
-            if [ $? -eq 0 ]; then
-                echo "Composer install successfully."
-                chmod +x /usr/local/bin/composer
-            else
-                echo "Composer install failed, try to from composer official website..."
-                curl -sS --connect-timeout 30 -m 60 https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-                if [ $? -eq 0 ]; then
-                    echo "Composer install successfully."
-                fi
-            fi
+        local Composer_Version="${Composer_Ver}"
+        local Composer_PHP_Version="${php_version:-${Php_Ver#php-}}"
+        if [[ "${Composer_PHP_Version}" =~ ^(5\.[2-6]|7\.[0-2])\. ]] || { [ -z "${Composer_PHP_Version}" ] && [[ "${PHPSelect}" =~ ^[1-8]$ ]]; }; then
+            Composer_Version="${Composer_LTS_Ver}"
         fi
-        #if [ "${country}" = "CN" ]; then
-            #composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
-        #fi
+        local Composer_File="composer-${Composer_Version}.phar"
+        if ! (
+            cd "${cur_dir}/src" &&
+            Download_Files "https://getcomposer.org/download/${Composer_Version}/composer.phar" "${Composer_File}"
+        ); then
+            Echo_Red "Error! Unable to download or verify Composer ${Composer_Version}."
+            return 1
+        fi
+        install -m 0755 "${cur_dir}/src/${Composer_File}" /usr/local/bin/composer || return 1
+        echo "Composer install successfully."
     fi
 }
 

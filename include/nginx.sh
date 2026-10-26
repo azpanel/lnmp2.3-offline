@@ -8,18 +8,17 @@ Install_Nginx_Openssl()
         fi
         Nginx_Ver_Com=$(${cur_dir}/include/version_compare 1.13.0 ${Nginx_Version})
         if [[ "${Nginx_Ver_Com}" == "0" ||  "${Nginx_Ver_Com}" == "1" ]]; then
-            Download_Files ${Download_Mirror}/lib/openssl/${Openssl_Ver}.tar.gz ${Openssl_Ver}.tar.gz
+            if ! Download_Files https://www.openssl.org/source/old/1.0.2/${Openssl_Ver}.tar.gz ${Openssl_Ver}.tar.gz; then
+                Echo_Red "Error! Unable to download or verify ${Openssl_Ver}."
+                exit 1
+            fi
             [[ -d "${Openssl_Ver}" ]] && rm -rf ${Openssl_Ver}
             tar zxf ${Openssl_Ver}.tar.gz
             Nginx_With_Openssl="--with-openssl=${cur_dir}/src/${Openssl_Ver}"
         else
-            Download_Files ${Download_Mirror}/lib/openssl/${Openssl_New_Ver}.tar.gz ${Openssl_New_Ver}.tar.gz
-            if [ $? -ne 0 ]; then
-                Download_Files https://www.openssl.org/source/${Openssl_New_Ver}.tar.gz ${Openssl_New_Ver}.tar.gz
-                if [ $? -ne 0 ]; then
-                    Echo_Red "Error! Unable to download ${Openssl_New_Ver}."
-                    exit 1
-                fi
+            if ! Download_Files https://www.openssl.org/source/${Openssl_New_Ver}.tar.gz ${Openssl_New_Ver}.tar.gz; then
+                Echo_Red "Error! Unable to download or verify ${Openssl_New_Ver}."
+                exit 1
             fi
             [[ -d "${Openssl_New_Ver}" ]] && rm -rf ${Openssl_New_Ver}
             tar zxf ${Openssl_New_Ver}.tar.gz
